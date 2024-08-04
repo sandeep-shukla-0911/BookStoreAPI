@@ -1,3 +1,4 @@
+using BookStore.Constants;
 using BookStore.Interfaces;
 using BookStore.Request;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,6 @@ namespace BookStore.Controllers
     [OpenApiTag("Checkout Data")]
     public class CheckoutController : ControllerBase
     {
-        private static readonly int delayInMilliSeconds = 200;
         private readonly ILogger<CheckoutController> _logger;
         private readonly ICheckoutHelper _checkoutHelper;
 
@@ -34,12 +34,12 @@ namespace BookStore.Controllers
         {
             try
             {
-                await Task.Delay(delayInMilliSeconds);
+                await Task.Delay(Global.DelayInMilliSeconds);
                 bool isCheckoutSuccess = _checkoutHelper.HandleCheckout(checkoutRequest);
                 object result = new
                 {
-                    result = isCheckoutSuccess ? "success" : "failure",
-                    message = isCheckoutSuccess ? "order placed successfully" : "order failed to place"
+                    result = isCheckoutSuccess ? Messages.Success : Messages.Failure,
+                    message = isCheckoutSuccess ? Messages.OrderPlacedSuccessfully : Messages.OrderFailedToPlace
                 };
                 return Ok(result);
             }

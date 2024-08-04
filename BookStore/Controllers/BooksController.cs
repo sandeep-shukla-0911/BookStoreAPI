@@ -1,3 +1,4 @@
+using BookStore.Constants;
 using BookStore.Data;
 using BookStore.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -18,9 +19,7 @@ namespace BookStore.Controllers
     [OpenApiTag("Books Data")]
     public class BooksController : ControllerBase
     {
-        private static readonly int delayInMilliSeconds = 200;
         private static readonly List<Books> allBooksData = MockData.books;
-
         private readonly ILogger<BooksController> _logger;
 
         public BooksController(ILogger<BooksController> logger)
@@ -30,11 +29,12 @@ namespace BookStore.Controllers
 
         [HttpGet(Name = "GetAllBooks")]
         [Authorize(Roles = "admin,user")]
+        [ResponseCache(CacheProfileName = ResponseCacheProfiles.CacheCommon)]
         public async Task<ActionResult<IEnumerable<Books>>> GetAllBooks()
         {
             try
             {
-                await Task.Delay(delayInMilliSeconds);
+                await Task.Delay(Global.DelayInMilliSeconds);
                 return Ok(allBooksData);
             }
             catch (Exception ex)
@@ -45,15 +45,17 @@ namespace BookStore.Controllers
 
         [HttpGet("{id}",Name = "GetBookDetails")]
         [Authorize]
+        [ResponseCache(CacheProfileName = ResponseCacheProfiles.CacheVaryById)]
         public async Task<ActionResult<IEnumerable<Books>>> GetBookDetails(int id)
         {
             try
             {
-                await Task.Delay(delayInMilliSeconds);
+                await Task.Delay(Global.DelayInMilliSeconds);
                 var bookDetails = allBooksData.FirstOrDefault(x => x.Id == id);
                 if (bookDetails == null)
                 {
-                    return NotFound();
+                    object objBookNotFound = new { message = Messages.BookNotFound };
+                    return NotFound(objBookNotFound);
                 }
                 else 
                 {

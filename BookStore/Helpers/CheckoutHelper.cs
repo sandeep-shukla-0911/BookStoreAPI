@@ -1,4 +1,5 @@
-﻿using BookStore.Data;
+﻿using BookStore.Constants;
+using BookStore.Data;
 using BookStore.Interfaces;
 using BookStore.Models;
 using BookStore.Request;
@@ -30,7 +31,7 @@ namespace BookStore.Helpers
                 var book = _bookService.GetBook(item);
                 if (book == null)
                 {
-                    throw new Exception("Book not found");
+                    throw new Exception(Messages.BookNotFound);
                 }
                 else
                 {
@@ -42,14 +43,14 @@ namespace BookStore.Helpers
             var user = _userHelper.GetCurrentUser();
             if (user == null)
             {
-                throw new Exception("User not found");
+                throw new Exception(Messages.UserNotFound);
             }
 
             // get address details
             var address = _addressService.GetAllAddress()?.SingleOrDefault(x => x.UserId == user.Id);
             if (address == null)
             {
-                throw new Exception("Address not found");
+                throw new Exception(Messages.AddressNotFound);
             }
 
             // calculate total amount

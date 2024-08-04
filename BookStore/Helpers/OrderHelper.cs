@@ -1,4 +1,5 @@
-﻿using BookStore.Interfaces;
+﻿using BookStore.Constants;
+using BookStore.Interfaces;
 using BookStore.Models;
 using BookStore.Response;
 
@@ -24,19 +25,19 @@ namespace BookStore.Helpers
             var order = _orderService.GetOrder(OrderId);
             if (order == null)
             {
-                throw new Exception("Order not found");
+                throw new Exception(Messages.OrderNotFound);
             }
             // get order line items
             var orderLineItems = _orderService.GetAllOrderLineItems(OrderId);
             if (orderLineItems == null)
             {
-                throw new Exception("Order line items not found");
+                throw new Exception(Messages.OrderLineItemsNotFound);
             }
             // get user details
             var user = _userHelper.GetUser(order.UserId);
             if (user == null)
             {
-                throw new Exception("User not found");
+                throw new Exception(Messages.UserNotFound);
             }
             var Books = new List<Books>();
             // get book details
@@ -45,7 +46,7 @@ namespace BookStore.Helpers
                 var book = _bookService.GetBook(item.BookId);
                 if (book == null)
                 {
-                    throw new Exception("Book not found");
+                    throw new Exception(Messages.BookNotFound);
                 }
                 else
                 {
@@ -57,7 +58,7 @@ namespace BookStore.Helpers
             var address = _addressService.GetAddress(order.AddressId);
             if (address == null)
             {
-                throw new Exception("Address not found");
+                throw new Exception(Messages.AddressNotFound);
             }
 
             // prepare order details

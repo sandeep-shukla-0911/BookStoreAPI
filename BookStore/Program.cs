@@ -5,6 +5,8 @@ using BookStore.Interfaces;
 using BookStore.Services;
 using Microsoft.OpenApi.Models;
 using BookStore.Helpers;
+using Microsoft.AspNetCore.Mvc;
+using BookStore.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +76,27 @@ builder.Services.AddAuthentication(config => {
     };
 });
 
+
+builder.Services.AddControllers(option =>
+{
+    option.CacheProfiles.Add(ResponseCacheProfiles.CacheCommon,
+        new CacheProfile()
+        {
+            Duration = 180,
+            Location = ResponseCacheLocation.Any
+        });
+    option.CacheProfiles.Add(ResponseCacheProfiles.CacheVaryById,
+       new CacheProfile()
+       {
+           Duration = 180,
+           Location = ResponseCacheLocation.Any,
+           VaryByQueryKeys = ["id"]
+       });
+
+});
+
+builder.Services.AddResponseCaching();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -94,5 +117,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseResponseCaching();
 
 app.Run();

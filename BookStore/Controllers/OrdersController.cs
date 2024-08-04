@@ -1,3 +1,4 @@
+using BookStore.Constants;
 using BookStore.Data;
 using BookStore.Interfaces;
 using BookStore.Response;
@@ -19,7 +20,6 @@ namespace BookStore.Controllers
     [OpenApiTag("Orders Data")]
     public class OrdersController : ControllerBase
     {
-        private static readonly int delayInMilliSeconds = 200;
         private readonly ILogger<OrdersController> _logger;
         private readonly IOrderHelper _orderHelper;
         private readonly IUserHelper _userHelper;
@@ -37,7 +37,7 @@ namespace BookStore.Controllers
         {
             try
             {
-                await Task.Delay(delayInMilliSeconds);
+                await Task.Delay(Global.DelayInMilliSeconds);
                 var currentUser = _userHelper.GetCurrentUser();
 
                 List<OrderDetailsDTO> orderDetailsDTO = new();
@@ -65,21 +65,23 @@ namespace BookStore.Controllers
             }
         }
 
-        [HttpGet("{orderId}", Name = "GetOrderDetails")]
+        [HttpGet("{id}", Name = "GetOrderDetails")]
         [Authorize]
-        public async Task<ActionResult<OrderDetailsDTO>> GetOrderDetails(int orderId)
+        [ResponseCache(CacheProfileName = ResponseCacheProfiles.CacheVaryById)]
+        public async Task<ActionResult<OrderDetailsDTO>> GetOrderDetails(int id)
         {
             try
             {
-                await Task.Delay(delayInMilliSeconds);
-                var orderDetails = MockData.orders.FirstOrDefault(x => x.Id == orderId);
+                await Task.Delay(Global.DelayInMilliSeconds);
+                var orderDetails = MockData.orders.FirstOrDefault(x => x.Id == id);
                 if (orderDetails == null)
                 {
-                    return NotFound();
+                    object objOrderNotFound = new { message = Messages.OrderNotFound };
+                    return NotFound(objOrderNotFound);
                 }
                 else 
                 {
-                    return Ok(_orderHelper.PrepareOrderDetails(orderId)); 
+                    return Ok(_orderHelper.PrepareOrderDetails(id)); 
                 }
             }
             catch (Exception ex)

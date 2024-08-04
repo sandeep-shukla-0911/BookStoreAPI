@@ -1,4 +1,5 @@
-﻿using BookStore.Interfaces;
+﻿using BookStore.Constants;
+using BookStore.Interfaces;
 using BookStore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace BookStore.Controllers
             var validatedUser = _userService.Login(user.UserName, user.Password);
 
             if (validatedUser == null || validatedUser?.Token == String.Empty)
-                return BadRequest(new { message = "User name or password is incorrect" });
+                return BadRequest(new { message = Messages.IncorrectUserNameOrPassword });
 
             object formattedResult = new
             {

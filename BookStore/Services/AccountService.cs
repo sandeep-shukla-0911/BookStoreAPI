@@ -1,4 +1,5 @@
-﻿using BookStore.Data;
+﻿using BookStore.Constants;
+using BookStore.Data;
 using BookStore.Interfaces;
 using BookStore.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +11,6 @@ namespace BookStore.Services
 {
     public class AccountService : IAccountService
     {
-        public readonly string ClaimIdentifierUserId = "UserId";
         public readonly IConfiguration _configuration;
         public AccountService(IConfiguration configuration) => _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
@@ -26,7 +26,7 @@ namespace BookStore.Services
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWT_Secret"));
+            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>(Global.JWTSecret));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -34,7 +34,7 @@ namespace BookStore.Services
                 [
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Role, user.Role),
-                    new Claim(ClaimIdentifierUserId, user.Id.ToString())
+                    new Claim(Global.ClaimIdentifierUserId, user.Id.ToString())
                 ]),
 
                 Expires = DateTime.UtcNow.AddMinutes(5),
