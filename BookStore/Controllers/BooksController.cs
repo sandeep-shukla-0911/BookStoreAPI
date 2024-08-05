@@ -28,7 +28,7 @@ namespace BookStore.Controllers
         }
 
         [HttpGet(Name = "GetAllBooks")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "Admin,User")]
         [ResponseCache(CacheProfileName = ResponseCacheProfiles.CacheCommon)]
         public async Task<ActionResult<IEnumerable<Books>>> GetAllBooks()
         {

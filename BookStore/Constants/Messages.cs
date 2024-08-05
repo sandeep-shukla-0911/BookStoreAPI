@@ -13,6 +13,7 @@
         public const string Error = "Error";
         public const string OrderPlacedSuccessfully = "Order placed successfully";
         public const string OrderFailedToPlace = "Order failed to place";
+        public const string Unauthorized = "Unauthorized";
 
     }
 }

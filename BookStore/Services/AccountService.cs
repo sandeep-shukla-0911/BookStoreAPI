@@ -37,7 +37,7 @@ namespace BookStore.Services
                     new Claim(Global.ClaimIdentifierUserId, user.Id.ToString())
                 ]),
 
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddMinutes(Global.JWTExpiryInMinutes),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

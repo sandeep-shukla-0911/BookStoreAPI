@@ -1,3 +1,4 @@
+using BookStore.Authorization;
 using BookStore.Constants;
 using BookStore.Data;
 using BookStore.Interfaces;
@@ -32,7 +33,7 @@ namespace BookStore.Controllers
         }
 
         [HttpGet(Name = "GetAllOrders")]
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<IEnumerable<OrderDetailsDTO>>> GetAllOrders()
         {
             try
@@ -42,7 +43,7 @@ namespace BookStore.Controllers
 
                 List<OrderDetailsDTO> orderDetailsDTO = new();
 
-                if (currentUser.Role.Equals("admin"))
+                if (currentUser.Role.Equals(Global.UserRoleAdmin))
                 {
                     foreach (var order in MockData.orders)
                     {
@@ -67,6 +68,7 @@ namespace BookStore.Controllers
 
         [HttpGet("{id}", Name = "GetOrderDetails")]
         [Authorize]
+        [AuthorizeOrder]
         [ResponseCache(CacheProfileName = ResponseCacheProfiles.CacheVaryById)]
         public async Task<ActionResult<OrderDetailsDTO>> GetOrderDetails(int id)
         {

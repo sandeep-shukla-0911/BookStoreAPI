@@ -1,4 +1,5 @@
-﻿using BookStore.Models;
+﻿using BookStore.Constants;
+using BookStore.Models;
 
 namespace BookStore.Data
 {
@@ -64,7 +65,7 @@ namespace BookStore.Data
                 Id = 1,
                 UserName = "admin",
                 Password = "admin",
-                Role = "admin",
+                Role = Global.UserRoleAdmin,
                 FullName = "Sandeep Admin"
             },
              new()
@@ -72,7 +73,7 @@ namespace BookStore.Data
                 Id = 2,
                 UserName = "user",
                 Password = "user",
-                Role = "user",
+                Role = Global.UserRoleUser,
                 FullName = "Sandeep User"
             }
         ];
